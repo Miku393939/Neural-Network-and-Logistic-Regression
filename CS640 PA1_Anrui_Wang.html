@@ -1,0 +1,234 @@
+
+<html>
+<head>
+<title> CS640 : HW[x] Student Name [xxx]  </title>
+<style>
+<!--
+body{
+font-family: 'Trebuchet MS', Verdana;
+}
+p{
+font-family: 'Trebuchet MS', Times;
+margin: 10px 10px 15px 20px;
+}
+h3{
+margin: 5px;
+}
+h2{
+margin: 10px;
+}
+h1{
+margin: 10px 0px 0px 20px;
+}
+div.main-body{
+align:center;
+margin: 30px;
+}
+hr{
+margin:20px 0px 20px 0px;
+}
+-->
+</style>
+</head>
+
+<body>
+<center>
+<a href="http://www.bu.edu"><img border="0" src="http://www.cs.bu.edu/fac/betke/images/bu-logo.gif"
+width="119" height="120"></a>
+</center>
+
+<h1>Neural Network</h1>
+<p> 
+ CS 640 Programming assignment 1 <br>
+ Anrui Wang <br>
+    Feb.26 2018 
+</p>
+
+<div class="main-body">
+<hr>
+<h2> Problem Definition </h2>
+<p>
+In this project, we need to implement a 2-layer neural network and a 3-layer neural network with a hidden layer of 20 nodes, and then train them with linear data, non-linear data and image pixel data of number 0 to 9. And we should also find the proper learning rate that makes the model works well.<br/><br/>
+The result is useful because it helps us to understand how to build a neural network and how to adjust parameters.<br/><br/>
+I have an assumption that the result of nerual network with more nodes in hidden layer will work better than which with less nodes.<br/><br/>
+The anticipated difficulty is to build the formula and process the data into decent matrix form which can be used in the formula.
+</p>
+
+<hr>
+<h2> Method and Implementation </h2>
+<p>
+  For the 0 hidden layer neural network part, firstly I add a new parameter "method" into the class which makes it possible to switch the function.<br/><br/>
+  Then I modified the formula in fit(), compute_cost() and predict() functions to make them normally work in neural network with 0 hidden layers, both for linear and non-linear data sets.<br/><br/>
+
+  For the 1 hidden layer neural network(3-layer) part, firstly I add a new layer when modifying the initialize function, making the output of the input layer be transmitted into the hidden layer, and the result of hidden layer be passed to the input of output layer.<br/><br/>
+  I implemented 3 new functions:<br/>
+  1. fit_NN1hidden() function, which contains a process of forward propagation and 2 processes of backward propagation(together with the L2 regularization to reduce the overfitting). <br/>
+  2. compute_cost_NN1hidden() function, which works as a loss function.<br/>
+  3. predict_NN1hidden() function, which computes the anticipate testing value of y using the X testing data using forward propagation.<br/><br/>
+  As I use parameters input_dim and output_dim as the dimension of X and y, so that whatever the dimension of X and y is, the function could adapt to it.<br/><br/>
+  Formulas I used are:<br/>
+  1. Sigmoid function: g(x) = 1 / 1 + exp^(-z) = exp(z) / exp(z) + 1;<br>
+  2. Derivative of Sigmoid function: g'(x) = g(x) * (1 - g(x));<br>
+  3. Weight update in back prop:delta2 = (theta2^T dot* delta3)*g'(z2)<br>
+  4. Logistic cost function: cost(h_theta(x),y)= sum_{i=1}^m(-y*log(h_theta(x))-(1-y)*log(1-h_theta(x)))<br/>
+  5. L2 regularization function:EmpLoss(h) = 1/N sum L(ytrue, h(x))<br/>
+  h = argmin(EmpLoss(h) + lamda*Complexity(h))
+
+
+
+
+
+</p>
+
+<p>
+Formulas inplemented in codes:<br/>
+1: softmax_scores = exp_z / (exp_z + 1);<br/>
+2 & 3: beta = np.multiply(np.dot(beta_hide, self.theta2.T), np.multiply(softmax_scores, (1 - softmax_scores))) <br/>
+4:
+logloss[i] = -np.sum(np.log(softmax_scores[i,:]) * one_hot_y[i,:])<br/>
+data_loss = np.sum(logloss)<br/>
+return 1./num_examples * data_loss<br/>
+5: self.theta -= lr * (dtheta + (self.theta * self.theta) / (input_dim * 2))<br/>
+</p>
+
+<hr>
+<h2>Experiments</h2>
+<p>
+<p>We use DATA/LinearX.csv, DATA/LinearY.csv, DATA/Non-LinearX.csv, DATA/Non-LinearY.csv as the source data, corresponding to Linear Data array, labels corresponding to Linear data, Non-Linear data array, labels corresponding to Non-Linear data.
+
+For the last extra-credit problem, we use the model to train DATA/Digit_X_train.csv and DATA/Digit_y_train.csv, then test the model on DATA/Digit_X_test.csv and DATA/Digit_y_test.csv.</p>
+<p>
+There are 11 times of trials.<br/>
+1. For linear data, using 2-layers NN. Learning rate is 0.01. <br/>
+2. For Non-linear data, using 2-layers NN. Learning rate is 0.01. <br/>
+3. For linear data, using 3-layers NN with 3 nodes. Learning rate is 0.01. <br/>
+4. For linear data, using 3-layers NN with 20 nodes. Learning rate is 0.01. <br/>
+5. For linear data, using 3-layers NN with 20 nodes. Learning rate is 0.001. <br/>
+6. For Non-linear data, using 3-layers NN with 3 nodes. Learning rate is 0.01. <br/>
+7. For Non-linear data, using 3-layers NN with 20 nodes. Learning rate is 0.01. <br/>
+8. For Non-linear data, using 3-layers NN with 20 nodes. Learning rate is 0.001. <br/>
+9. For Digital data, using 3-layers NN with 20 nodes. Learning rate is 0.01. <br/>
+10. For Digital data, using 3-layers NN with 20 nodes. Learning rate is 0.001. <br/>
+</p>
+
+<p>
+The evalution parameter is the accuracy. </p>
+
+
+<hr>
+<h2> Results</h2>
+<p>
+
+</p>
+
+<p>
+<table>
+<tr><td colspan=3><center><h3>Results</h3></center></td></tr>
+<tr>
+<td> Trial </td><td> Source Image </td> <td> Result Image</td> 
+</tr>
+<tr>
+  <td> trial 1 </td> 
+  <td> <img src="image/datal.png", height="240", width="350"> </td> 
+  <td> <img src="image/result1.png", height="240", width="350"> 
+  1. Accuracy = 0.93;<br/></td>
+
+</tr> 
+<tr>
+  <td> trial 2 </td> 
+  <td> <img src="image/datanl.png", height="240", width="350"> </td> 
+  <td> <img src="image/result2.png", height="240", width="350"> 2. Accuracy = 0.875;<br/></td>
+</tr> 
+<tr>
+  <td> trial 3 </td> 
+  <td> <img src="image/datal.png", height="240", width="350"> </td> 
+  <td> <img src="image/result3.png", height="240", width="350"> 3. Accuracy = 0.934;<br/></td>
+</tr> 
+<tr>
+  <td> trial 4 </td> 
+  <td> <img src="image/datal.png", height="240", width="350"> </td> 
+  <td> <img src="image/result4.png", height="240", width="350"> 4. Accuracy = 0.93;<br/></td>
+</tr> 
+<tr>
+  <td> trial 5 </td> 
+  <td> <img src="image/datal.png", height="240", width="350"> </td> 
+  <td> <img src="image/result5.png", height="240", width="350"> 5. Accuracy = 0.934;<br/></td>
+</tr> 
+<tr>
+  <td> trial 6 </td> 
+  <td> <img src="image/datanl.png", height="240", width="350"> </td> 
+  <td> <img src="image/result6.png", height="240", width="350"> 6. Accuracy = 0.875;<br/></td>
+</tr> 
+<tr>
+  <td> trial 7 </td> 
+  <td> <img src="image/datanl.png", height="240", width="350"> </td> 
+  <td> <img src="image/result7.png", height="240", width="350"> 7. Accuracy = 0.884;<br/></td>
+</tr> 
+<tr>
+  <td> trial 8 </td> 
+  <td> <img src="image/datanl.png", height="240", width="350"> </td> 
+  <td> <img src="image/result8.png", height="240", width="350"> 8. Accuracy = 0.937;<br/></td>
+</tr> 
+<tr>
+  <td> trial 9 </td> 
+  <td> <img src="image/datad.png", height="240", width="350"> </td> 
+  <td> <img src="image/result9.png", height="240", width="350"> 9. Accuracy = 0.932;<br/></td>
+</tr> 
+<tr>
+  <td> trial 10 </td> 
+  <td> <img src="image/datad.png", height="240", width="350"> </td> 
+  <td> <img src="image/result10.png", height="240", width="350"> 10. Accuracy = 0.859;<br/></td>
+</tr> 
+</table>
+</p>
+
+
+
+<hr>
+<h2> Discussion </h2>
+
+<p> 
+
+<ul>
+  <h3>Strengths of my model:</h3>
+<li>For all the data sets, the model come to decent results(no less than 0.85).</li>
+<li>It can work on both linear and non-linear data, and also data with more than 3 dimensions.</li>
+<li>It's very easy to understand and use. </li>
+<li>It helps us to deeply understand the theorem.</li>
+<h3>Weaknesses of my model:</h3>
+<li>The L2 normalization works not very well. The difference between using L2 and not using L2 is just 1% scale.</li>
+<li>Not extremely precise(no more than 0.95).</li>
+<h3>Discussion considering result:</h3>
+<li>The result shows that the model is with some limitations. Firstly, the accuracy of the model is not very stable. Sometimes, rising the lr could improve the accuracy but sometimes it could not and so does the node number. I want to find out whether the parameter is increasing or decreasing the accuracy but I am not clear throughing the result. The only thing I am sure is that 3-layer NN is better than 2-layer NN.</li>
+<li>Maybe I could keep on increasing the number of layers and add more trial on that to find out the precise result and answer my question.</li> 
+</ul>
+</p>
+
+<hr>
+<h2> Conclusions </h2>
+
+<p>
+We have implemented the neural network with 2 layers and 3 layers and got a bunch of decent data. Meanwhile, we have a deeper understanding of the theorem. 
+For processing multidimension data, NN is a good way as it's precise and easy to implement.Also, as the number of parameters is not very large, we could easily modify particular parameter and observe the result causing by that parameter, such as the node number and learning rate. 
+</p>
+
+
+<hr>
+<h2> Credits and Bibliography </h2>
+
+http://blog.csdn.net/bitcarmanlee/article/details/51165444<br/>
+https://www.cnblogs.com/KID-XiaoYuan/p/7261697.html<br/>
+http://www.cs.bu.edu/fac/betke/cs440/restricted/lectures/ai-learning-from-examples-2016.pdf<br/>
+http://www.cs.bu.edu/faculty/betke/cs440/restricted/labs/CS440640Lab5.pdf
+</p>
+
+<p>
+Credit to discussion with Mingrui Yang and Shifeng Li.
+</p>
+<hr>
+</div>
+</body>
+
+
+
+</html>
